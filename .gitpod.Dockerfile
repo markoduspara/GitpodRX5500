@@ -13,4 +13,4 @@ WORKDIR /app
 COPY . /app
 RUN pip --no-cache-dir install -r requirements.txt
 RUN pip install flask
-CMD ["flask", "run"]
+CMD ["gunicorn", "app:app"]
