@@ -1,4 +1,4 @@
 image:
   file: .gitpod.Dockerfile
 tasks:
-  command: gunicorn app:app --bind 0.0.0.0:5000 --workers 2 --threads 2 --worker-class eventlet --timeout 100
+  - command: gunicorn app:app --bind 0.0.0.0:5000 --workers 2 --threads 2 --worker-class eventlet --timeout 100
