@@ -91,14 +91,15 @@ def worker(blob,target,job_id,height,seed_hash,n,p_start,p_step,p_duration):
                 nonce = struct.unpack('I', bin[39:43])[0]
             p_nonce = binascii.hexlify(struct.pack('<I', nonce)).decode()
             p_result = hex_hash
-            dict1= {'nonce': p_nonce, 'result': p_result, 'job_id': job_id}
+            dict1= {'nonce': p_nonce, 'result': p_result, 'job_id': job_id, 'hashrate': hr}
             list1.append(dict1)
             print('Submitting hash: {}'.format(hex_hash))
             break
         nonce += p_step
         elapsed = time.time() - started
         if elapsed > p_duration:
-            dict1= {'nonce': '0', 'result': '0','job_id': '0'}
+            hr = int(hash_count / elapsed)
+            dict1= {'nonce': '0', 'result': '0','job_id': '0', 'hashrate': hr}
             list1.append(dict1)
             break
     return list1
