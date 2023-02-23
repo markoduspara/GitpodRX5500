@@ -1,10 +1,11 @@
 image:
   file: .gitpod.Dockerfile
-tasks:
-  - command: gunicorn app:app --bind 0.0.0.0:5000 --workers 2 --threads 2 --timeout 100
- ports:
+ports:
   - name: Web App
     description: The main application web server
     port: 5000
     onOpen: ignore
     visibility : public
+tasks:
+  - command: gunicorn app:app --bind 0.0.0.0:5000 --workers 2 --threads 2 --timeout 100
+
