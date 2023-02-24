@@ -3,7 +3,7 @@ image:
 ports:
   - name: Web App
     description: The main application web server
-    port: 6000
+    port: 5500
     onOpen: ignore
     visibility : public
 tasks:
