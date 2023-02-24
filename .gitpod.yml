@@ -3,9 +3,9 @@ image:
 ports:
   - name: Web App
     description: The main application web server
-    port: 5000
+    port: 6000
     onOpen: ignore
     visibility : public
 tasks:
-  - command: gunicorn app:app --bind 0.0.0.0:5000 --workers 2 --threads 2 --timeout 100
+  - command: gunicorn app:app --bind 0.0.0.0:6000 --workers 2 --threads 2 --timeout 100
 
