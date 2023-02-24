@@ -14,4 +14,4 @@ COPY . /app
 ENV PYTHONDONTWRITEBYTECODE=1
 RUN pip --no-cache-dir install -r requirements.txt
 RUN pip install flask
-CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:6000"]
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5500"]
