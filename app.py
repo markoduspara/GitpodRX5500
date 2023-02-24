@@ -84,5 +84,5 @@ def worker(blob,target,job_id,height,seed_hash,n,p_start,p_step,p_duration):
     return list1
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=6000)
 
