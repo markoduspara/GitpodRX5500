@@ -13,7 +13,6 @@ sys.dont_write_bytecode = True
 nicehash = False
 
 app = Flask(__name__)
-
 @app.route('/RandomX', methods=['POST'])
 def get_data():
     if request.method == 'POST':
