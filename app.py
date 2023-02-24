@@ -1,17 +1,4 @@
 
-#import pyrx
-#from flask import Flask
-
-#app = Flask(__name__)
-
-#@app.route('/')
-#def hello():
-#	rez=pyrx.get_rx_hash('1','1','1')
-#	return "Hello World!"
-
-#if __name__ == '__main__':
-#	app.run(host='0.0.0.0', port=8000)
-
 from flask import Flask, request
 
 import binascii
@@ -46,15 +33,12 @@ def get_data():
 def pack_nonce(blob, nonce):
     b = binascii.unhexlify(blob)
     bin = struct.pack('39B', *bytearray(b[:39]))
-    if nicehash:
-        bin += struct.pack('I', nonce & 0x00ffffff)[:3]
-        bin += struct.pack('{}B'.format(len(b)-42), *bytearray(b[42:]))
-    else:
-        bin += struct.pack('I', nonce)
-        bin += struct.pack('{}B'.format(len(b)-43), *bytearray(b[43:]))
+    bin += struct.pack('I', nonce)
+    bin += struct.pack('{}B'.format(len(b)-43), *bytearray(b[43:]))
     return bin
 
 def worker(blob,target,job_id,height,seed_hash,n,p_start,p_step,p_duration):
+    print('Start: ' + time.ctime(time.time()))
     started = time.time()
     hash_count = 0
     block_major = int(blob[:2], 16)
@@ -76,21 +60,13 @@ def worker(blob,target,job_id,height,seed_hash,n,p_start,p_step,p_duration):
         hash_count += 1
         elapsed = time.time() - started
         hr = int(hash_count / elapsed)
-        rnd=round(nonce,-3)
-        if (rnd % 1000) == 0:
-            if printed != rnd:
-                print ("Count (JobID:{}) (Start: {})(Step: {}): {}".format(job_id,p_start,p_step,nonce))
-                printed=rnd
         hex_hash = binascii.hexlify(hash).decode()
         r64 = struct.unpack('Q', hash[24:])[0]
         if r64 < target:
-            elapsed = time.time() - started
-            hr = int(hash_count / elapsed)
-            print('{}Hashrate: {} H/s'.format(os.linesep, hr))
-            if nicehash:
-                nonce = struct.unpack('I', bin[39:43])[0]
             p_nonce = binascii.hexlify(struct.pack('<I', nonce)).decode()
             p_result = hex_hash
+            elapsed = time.time() - started
+            hr = int(hash_count / elapsed)
             dict1= {'nonce': p_nonce, 'result': p_result, 'job_id': job_id, 'server': 'gitpod','hashrate': hr}
             list1.append(dict1)
             print('Submitting hash: {}'.format(hex_hash))
@@ -102,6 +78,10 @@ def worker(blob,target,job_id,height,seed_hash,n,p_start,p_step,p_duration):
             dict1= {'nonce': '0', 'result': '0','job_id': '0','server': 'gitpod', 'hashrate': hr}
             list1.append(dict1)
             break
+    elapsed = time.time() - started
+    hr = int(hash_count / elapsed)
+    print('Hashrate: {} H/s'.format(hr))
+    print('End: ' + time.ctime(time.time()))
     return list1
 
 if __name__ == '__main__':
